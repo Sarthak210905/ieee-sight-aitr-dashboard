@@ -25,6 +25,7 @@ export interface IMember {
   rank: number
   joinYear: number
   isActive: boolean
+  role?: string // 'admin' or 'member'
 }
 
 const AchievementSchema = new Schema<IAchievement>({
@@ -51,6 +52,7 @@ const MemberSchema = new Schema<IMember>({
   rank: { type: Number, default: 0 },
   joinYear: { type: Number, required: true },
   isActive: { type: Boolean, default: true },
+  role: { type: String, enum: ['admin', 'member'], default: 'member' },
 }, {
   timestamps: true,
 })

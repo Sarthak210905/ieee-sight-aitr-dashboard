@@ -21,7 +21,8 @@ export async function GET(
     
     // Don't send password
     const { password, ...memberData } = member as any
-    
+    // Ensure role is present
+    if (!memberData.role) memberData.role = 'member'
     return NextResponse.json({ success: true, data: memberData })
   } catch (error: any) {
     console.error('Error fetching member:', error)
@@ -64,7 +65,8 @@ export async function PATCH(
     // Don't send password
     const memberObj = updatedMember.toObject()
     const { password, ...memberData } = memberObj as any
-
+    // Ensure role is present
+    if (!memberData.role) memberData.role = 'member'
     return NextResponse.json({ success: true, data: memberData })
   } catch (error: any) {
     console.error('Error updating member:', error)

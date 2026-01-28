@@ -58,6 +58,7 @@ export async function POST(request: NextRequest) {
         year: member.year,
         points: member.points,
         profileImage: member.profileImage,
+        role: member.role || 'member',
       }
       
       return NextResponse.json({ success: true, data: memberData })
@@ -94,6 +95,7 @@ export async function POST(request: NextRequest) {
             year: existingMember.year,
             points: existingMember.points,
             profileImage: existingMember.profileImage,
+            role: existingMember.role || 'member',
           }
           
           return NextResponse.json({ success: true, data: memberData })
@@ -129,6 +131,7 @@ export async function POST(request: NextRequest) {
         year: newMember.year,
         points: newMember.points,
         profileImage: newMember.profileImage,
+        role: newMember.role || 'member',
       }
       
       return NextResponse.json({ success: true, data: memberData })

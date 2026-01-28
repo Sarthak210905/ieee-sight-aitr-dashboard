@@ -10,6 +10,7 @@ interface MemberSession {
   year: string
   points: number
   profileImage?: string
+  role?: string // Added role property for admin/member distinction
 }
 
 interface MemberContextType {
@@ -67,11 +68,14 @@ export function MemberProvider({ children }: { children: ReactNode }) {
 
       if (result.success) {
         const session = {
-          member: result.data,
+          member: {
+            ...result.data,
+            role: result.data.role || undefined,
+          },
           expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
         }
         localStorage.setItem('memberSession', JSON.stringify(session))
-        setMember(result.data)
+        setMember(session.member)
         setShowLoginModal(false)
         return { success: true }
       } else {
@@ -94,11 +98,14 @@ export function MemberProvider({ children }: { children: ReactNode }) {
 
       if (result.success) {
         const session = {
-          member: result.data,
+          member: {
+            ...result.data,
+            role: result.data.role || undefined,
+          },
           expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         }
         localStorage.setItem('memberSession', JSON.stringify(session))
-        setMember(result.data)
+        setMember(session.member)
         setShowLoginModal(false)
         return { success: true }
       } else {
@@ -131,6 +138,7 @@ export function MemberProvider({ children }: { children: ReactNode }) {
             year: result.data.year,
             points: result.data.points,
             profileImage: result.data.profileImage,
+            role: result.data.role || undefined,
           },
           expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
         }
