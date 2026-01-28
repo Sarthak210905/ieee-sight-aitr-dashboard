@@ -3,11 +3,8 @@ import { googleDriveService } from '@/lib/googleDrive'
 import connectDB from '@/lib/mongodb'
 import { Document } from '@/models/Document'
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
 
 // Helper function to parse form data
 async function parseFormData(request: NextRequest) {
@@ -33,11 +30,9 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    // Convert file to buffer
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
     
-    // Upload to Google Drive
     const driveFile = await googleDriveService.uploadFile({
       fileName: file.name,
       mimeType: file.type,
@@ -45,7 +40,6 @@ export async function POST(request: NextRequest) {
       folderId: process.env.GOOGLE_DRIVE_FOLDER_ID,
     })
     
-    // Save to database
     const document = await Document.create({
       name: name || file.name,
       type: file.type.split('/')[1]?.toUpperCase() || 'FILE',
