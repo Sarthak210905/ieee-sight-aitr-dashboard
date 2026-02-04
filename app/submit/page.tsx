@@ -247,7 +247,6 @@ export default function SubmitAchievementPage() {
                       : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                   }`}
                 >
-                  {/* <div className="text-3xl mb-2">{cat.icon}</div> */
                   <div className="text-sm font-medium text-gray-800">{cat.label}</div>
                   <div className="text-xs text-gray-500">{cat.points} points</div>
                 </button>
