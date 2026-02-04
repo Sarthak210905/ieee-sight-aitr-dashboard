@@ -144,7 +144,7 @@ export default function SubmitAchievementPage() {
 
   const handleSubmitReport = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!member?._id) return
+    if (!member?._id || !member?.name || !member?.email) return
     
     try {
       const response = await fetch('/api/reports', {
@@ -152,6 +152,8 @@ export default function SubmitAchievementPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           reporterId: member._id,
+          reporterName: member.name,
+          reporterEmail: member.email,
           ...reportData
         })
       })
