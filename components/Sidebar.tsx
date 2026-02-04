@@ -1,8 +1,9 @@
 'use client'
 
+import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Home, TrendingUp, Users, Trophy, FileText, Shield, LogOut, Award, ClipboardCheck, User, Calendar, Flag } from 'lucide-react'
+import { Home, TrendingUp, Users, Trophy, FileText, Shield, LogOut, Award, ClipboardCheck, User, Calendar, Flag, Menu, X } from 'lucide-react'
 import { useAdmin } from '@/contexts/AdminContext'
 import { useMember } from '@/contexts/MemberContext'
 
@@ -25,11 +26,46 @@ export default function Sidebar() {
   const pathname = usePathname()
   const { isAdmin, setShowLoginModal: setShowAdminLogin, logout: adminLogout } = useAdmin()
   const { member, isLoggedIn, setShowLoginModal: setShowMemberLogin, logout: memberLogout } = useMember()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+
+  const closeMobileMenu = () => setMobileMenuOpen(false)
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 shadow-lg">
+    <>
+      {/* Mobile Header */}
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-white border-b border-gray-200 shadow-md z-50 flex items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-ieee-blue rounded-lg flex items-center justify-center">
+            <FileText className="text-white" size={20} />
+          </div>
+          <div>
+            <h1 className="text-lg font-bold text-gray-800">IEEE SIGHT</h1>
+            <p className="text-xs text-gray-500">AITR Dashboard</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="p-2 rounded-lg hover:bg-gray-100"
+          aria-label="Toggle menu"
+        >
+          {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Menu Overlay */}
+      {mobileMenuOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/50 z-40"
+          onClick={closeMobileMenu}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`fixed left-0 top-0 h-screen w-64 bg-white border-r border-gray-200 shadow-lg z-50 transition-transform duration-300 lg:translate-x-0 ${
+        mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}>
       {/* Logo */}
-      <div className="p-6 border-b border-gray-200">
+      <div className="p-6 border-b border-gray-200 lg:block hidden">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 bg-ieee-blue rounded-lg flex items-center justify-center">
             <FileText className="text-white" size={24} />
@@ -41,8 +77,11 @@ export default function Sidebar() {
         </div>
       </div>
 
+      {/* Mobile Logo Spacer */}
+      <div className="lg:hidden h-4"></div>
+
       {/* Navigation */}
-      <nav className="p-4 space-y-2">
+      <nav className="p-4 space-y-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
         {navigation.map((item) => {
           const isActive = pathname === item.href
           const Icon = item.icon
@@ -51,6 +90,7 @@ export default function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
+              onClick={closeMobileMenu}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                 isActive
                   ? 'bg-ieee-blue text-white shadow-md'
@@ -76,6 +116,7 @@ export default function Sidebar() {
                   <Link
                     key={item.name}
                     href={item.href}
+                    onClick={closeMobileMenu}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                       isActive
                         ? 'bg-ieee-blue text-white shadow-md'
@@ -125,6 +166,7 @@ export default function Sidebar() {
           <div className="flex items-center gap-2 justify-between">
             <Link 
               href={`/profile/${member._id}`}
+              onClick={closeMobileMenu}
               className="flex items-center gap-2 px-3 py-2 bg-ieee-blue/10 rounded-lg hover:bg-ieee-blue/20 transition flex-1"
             >
               <div className="w-8 h-8 bg-ieee-blue rounded-full flex items-center justify-center text-white font-bold text-sm">
@@ -145,7 +187,7 @@ export default function Sidebar() {
           </div>
         ) : (
           <button
-            onClick={() => setShowMemberLogin(true)}
+            onClick={() => { setShowMemberLogin(true); closeMobileMenu(); }}
             className="w-full flex items-center gap-2 px-4 py-2 bg-ieee-blue text-white rounded-lg hover:bg-ieee-light transition"
           >
             <User size={18} />
@@ -162,5 +204,6 @@ export default function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   )
 }
