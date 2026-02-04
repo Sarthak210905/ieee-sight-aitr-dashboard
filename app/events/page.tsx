@@ -138,28 +138,28 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div className="flex flex-col gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-ieee-blue mb-2 flex items-center gap-2">
-              <Calendar className="text-ieee-blue" />
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ieee-blue mb-2 flex items-center gap-2">
+              <Calendar className="text-ieee-blue w-6 h-6 sm:w-8 sm:h-8" />
               Events Calendar
             </h1>
-            <p className="text-gray-600">Upcoming workshops, seminars, and activities</p>
+            <p className="text-sm sm:text-base text-gray-600">Upcoming workshops, seminars, and activities</p>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <div className="flex bg-gray-100 rounded-lg p-1 flex-1 sm:flex-initial">
               <button
                 onClick={() => setViewMode('list')}
-                className={`px-4 py-2 rounded-md transition ${viewMode === 'list' ? 'bg-white shadow text-ieee-blue' : 'text-gray-600'}`}
+                className={`flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-md transition text-sm sm:text-base ${viewMode === 'list' ? 'bg-white shadow text-ieee-blue' : 'text-gray-600'}`}
               >
                 List
               </button>
               <button
                 onClick={() => setViewMode('calendar')}
-                className={`px-4 py-2 rounded-md transition ${viewMode === 'calendar' ? 'bg-white shadow text-ieee-blue' : 'text-gray-600'}`}
+                className={`flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-md transition text-sm sm:text-base ${viewMode === 'calendar' ? 'bg-white shadow text-ieee-blue' : 'text-gray-600'}`}
               >
                 Calendar
               </button>
@@ -167,10 +167,11 @@ export default function EventsPage() {
             {isAdmin && (
               <button
                 onClick={() => setShowAddForm(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-ieee-blue text-white rounded-lg hover:bg-ieee-light transition"
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-ieee-blue text-white rounded-lg hover:bg-ieee-light transition text-sm sm:text-base"
               >
-                <Plus size={18} />
-                Add Event
+                <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Add Event</span>
+                <span className="sm:hidden">Add</span>
               </button>
             )}
           </div>

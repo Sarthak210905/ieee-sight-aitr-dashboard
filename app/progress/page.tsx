@@ -47,57 +47,58 @@ export default function ProgressPage() {
     : 0
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-2">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-2">
           <div>
-            <h1 className="text-3xl font-bold text-ieee-blue">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ieee-blue">
               Progress Tracking
             </h1>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Monitor your activities and achievements over time
             </p>
           </div>
           {isAdmin && (
             <button
               onClick={() => setShowAddForm(true)}
-              className="flex items-center gap-2 bg-ieee-blue text-white px-4 py-2 rounded-lg hover:bg-ieee-light transition"
+              className="flex items-center justify-center gap-2 bg-ieee-blue text-white px-4 py-2 rounded-lg hover:bg-ieee-light transition whitespace-nowrap text-sm sm:text-base"
             >
-              <Plus size={20} />
-              Add Progress
+              <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span className="hidden sm:inline">Add Progress</span>
+              <span className="sm:hidden">Add</span>
             </button>
           )}
         </div>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md p-6 text-white">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-md p-4 sm:p-6 text-white">
           <div className="flex items-center justify-between mb-2">
-            <TrendingUp size={24} />
+            <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded">This Month</span>
           </div>
-          <p className="text-3xl font-bold mb-1">{currentMonth.events}</p>
-          <p className="text-sm opacity-90">Events Organized</p>
+          <p className="text-2xl sm:text-3xl font-bold mb-1">{currentMonth.events}</p>
+          <p className="text-xs sm:text-sm opacity-90">Events Organized</p>
         </div>
 
-        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-md p-6 text-white">
+        <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-lg shadow-md p-4 sm:p-6 text-white">
           <div className="flex items-center justify-between mb-2">
-            <Target size={24} />
+            <Target className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded">Overall</span>
           </div>
-          <p className="text-3xl font-bold mb-1">{totalEvents}</p>
-          <p className="text-sm opacity-90">Total Events</p>
+          <p className="text-2xl sm:text-3xl font-bold mb-1">{totalEvents}</p>
+          <p className="text-xs sm:text-sm opacity-90">Total Events</p>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-md p-6 text-white">
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg shadow-md p-4 sm:p-6 text-white">
           <div className="flex items-center justify-between mb-2">
-            <CheckCircle size={24} />
+            <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             <span className="text-xs bg-white/20 px-2 py-1 rounded">Average</span>
           </div>
-          <p className="text-3xl font-bold mb-1">{avgCompletion}%</p>
-          <p className="text-sm opacity-90">Target Completion</p>
+          <p className="text-2xl sm:text-3xl font-bold mb-1">{avgCompletion}%</p>
+          <p className="text-xs sm:text-sm opacity-90">Target Completion</p>
         </div>
 
         <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg shadow-md p-6 text-white">

@@ -190,24 +190,24 @@ export default function SubmitAchievementPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-ieee-blue mb-2 flex items-center gap-2">
-              <Award className="text-ieee-blue" />
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ieee-blue mb-2 flex items-center gap-2">
+              <Award className="text-ieee-blue w-6 h-6 sm:w-8 sm:h-8" />
               Submit Achievement
             </h1>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Submit your achievements and track their approval status
             </p>
           </div>
           <button
             onClick={() => setShowReportModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm sm:text-base whitespace-nowrap"
           >
-            <Flag size={18} />
+            <Flag className="w-4 h-4 sm:w-5 sm:h-5" />
             Report Issue
           </button>
         </div>

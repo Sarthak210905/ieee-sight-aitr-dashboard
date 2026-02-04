@@ -92,15 +92,15 @@ export default function LeaderboardPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-ieee-blue mb-2">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ieee-blue mb-2">
               Leaderboard
             </h1>
-            <p className="text-gray-600">
+            <p className="text-sm sm:text-base text-gray-600">
               Monthly winners and current rankings
             </p>
           </div>
@@ -109,22 +109,22 @@ export default function LeaderboardPage() {
       </div>
 
       {/* Current Top 3 */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         {currentLeaderboard.slice(0, 3).map((entry) => (
           <div
             key={entry.rank}
-            className={`bg-gradient-to-br ${getMedalColor(entry.rank)} rounded-lg shadow-xl p-6 text-white transform hover:scale-105 transition`}
+            className={`bg-gradient-to-br ${getMedalColor(entry.rank)} rounded-lg shadow-xl p-4 sm:p-6 text-white transform hover:scale-105 active:scale-95 transition`}
           >
             <div className="flex items-center justify-between mb-4">
-              <Crown size={32} />
-              <span className="text-5xl font-bold opacity-20">#{entry.rank}</span>
+              <Crown className="w-6 h-6 sm:w-8 sm:h-8" />
+              <span className="text-4xl sm:text-5xl font-bold opacity-20">#{entry.rank}</span>
             </div>
-            <h3 className="text-2xl font-bold mb-2">{entry.name}</h3>
-            <div className="bg-white/20 rounded-lg p-4 mb-3">
-              <p className="text-3xl font-bold mb-1">{entry.points}</p>
-              <p className="text-sm opacity-90">Total Points</p>
+            <h3 className="text-xl sm:text-2xl font-bold mb-2">{entry.name}</h3>
+            <div className="bg-white/20 rounded-lg p-3 sm:p-4 mb-3">
+              <p className="text-2xl sm:text-3xl font-bold mb-1">{entry.points}</p>
+              <p className="text-xs sm:text-sm opacity-90">Total Points</p>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-xs sm:text-sm">
               <div>
                 <p className="opacity-75">Events</p>
                 <p className="font-bold">{entry.eventsAttended}</p>
