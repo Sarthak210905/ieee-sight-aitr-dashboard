@@ -150,28 +150,33 @@ export default function EventsPage() {
             <p className="text-base sm:text-lg text-gray-600">Upcoming workshops, seminars, and activities</p>
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-            <div className="flex bg-gray-100 rounded-lg p-1 flex-1 sm:flex-initial">
+            <div className="flex border-2 border-gray-300 rounded-lg overflow-hidden flex-1 sm:flex-initial">
               <button
                 onClick={() => setViewMode('list')}
-                className={`flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-md transition text-sm sm:text-base ${viewMode === 'list' ? 'bg-white shadow text-ieee-blue' : 'text-gray-600'}`}
+                className={`flex-1 px-5 py-3 transition text-base font-medium min-h-[52px] flex items-center justify-center gap-2 ${
+                  viewMode === 'list' ? 'bg-ieee-blue text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
               >
-                List
+                <Filter size={18} />
+                <span>List</span>
               </button>
               <button
                 onClick={() => setViewMode('calendar')}
-                className={`flex-1 sm:flex-initial px-3 sm:px-4 py-2 rounded-md transition text-sm sm:text-base ${viewMode === 'calendar' ? 'bg-white shadow text-ieee-blue' : 'text-gray-600'}`}
+                className={`flex-1 px-5 py-3 transition text-base font-medium min-h-[52px] flex items-center justify-center gap-2 ${
+                  viewMode === 'calendar' ? 'bg-ieee-blue text-white' : 'bg-white text-gray-700 hover:bg-gray-50'
+                }`}
               >
-                Calendar
+                <Calendar size={18} />
+                <span>Calendar</span>
               </button>
             </div>
             {isAdmin && (
               <button
                 onClick={() => setShowAddForm(true)}
-                className="flex items-center justify-center gap-2 px-4 py-2 bg-ieee-blue text-white rounded-lg hover:bg-ieee-light transition text-sm sm:text-base"
+                className="w-full sm:w-auto bg-ieee-blue text-white px-5 py-3 rounded-lg hover:bg-ieee-light transition flex items-center justify-center gap-2 text-base font-medium min-h-[52px]"
               >
-                <Plus className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Add Event</span>
-                <span className="sm:hidden">Add</span>
+                <Plus size={20} />
+                <span>Add Event</span>
               </button>
             )}
           </div>
@@ -179,17 +184,17 @@ export default function EventsPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-lg shadow-md p-4">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2">
-          <Filter size={18} className="text-gray-500 flex-shrink-0" />
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-5">
+        <div className="flex items-center gap-3 overflow-x-auto scrollbar-thin pb-2">
+          <Filter size={20} className="text-gray-500 flex-shrink-0" />
           {EVENT_TYPES.map(type => (
             <button
               key={type.value}
               onClick={() => setFilterType(type.value)}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition ${
+              className={`px-5 py-2.5 rounded-full text-base font-medium whitespace-nowrap transition min-h-[44px] ${
                 filterType === type.value
-                  ? `${type.color} text-white`
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  ? `${type.color} text-white shadow-md`
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               {type.label}
@@ -200,29 +205,29 @@ export default function EventsPage() {
 
       {viewMode === 'calendar' ? (
         /* Calendar View */
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-6">
-            <button onClick={handlePrevMonth} className="p-2 hover:bg-gray-100 rounded-lg">
+        <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+          <div className="flex items-center justify-between mb-5 sm:mb-6">
+            <button onClick={handlePrevMonth} className="p-3 hover:bg-gray-100 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center">
               <ChevronLeft size={24} />
             </button>
-            <h2 className="text-xl font-bold text-gray-800">
+            <h2 className="text-lg sm:text-xl font-bold text-gray-800">
               {MONTHS[currentMonth]} {currentYear}
             </h2>
-            <button onClick={handleNextMonth} className="p-2 hover:bg-gray-100 rounded-lg">
+            <button onClick={handleNextMonth} className="p-3 hover:bg-gray-100 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center">
               <ChevronRight size={24} />
             </button>
           </div>
 
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-1 sm:gap-2">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-              <div key={day} className="text-center text-sm font-medium text-gray-500 py-2">
+              <div key={day} className="text-center text-xs sm:text-sm font-medium text-gray-500 py-2">
                 {day}
               </div>
             ))}
 
             {/* Empty cells for days before first day of month */}
             {Array.from({ length: getFirstDayOfMonth(currentMonth, currentYear) }).map((_, i) => (
-              <div key={`empty-${i}`} className="h-24 bg-gray-50 rounded"></div>
+              <div key={`empty-${i}`} className="h-20 sm:h-24 bg-gray-50 rounded"></div>
             ))}
 
             {/* Days of month */}
@@ -236,18 +241,18 @@ export default function EventsPage() {
               return (
                 <div
                   key={day}
-                  className={`h-24 border rounded-lg p-1 overflow-hidden ${
+                  className={`h-20 sm:h-24 border-2 rounded-lg p-1 overflow-hidden ${
                     isToday ? 'border-ieee-blue bg-blue-50' : 'border-gray-200'
                   }`}
                 >
-                  <div className={`text-sm font-medium mb-1 ${isToday ? 'text-ieee-blue' : 'text-gray-700'}`}>
+                  <div className={`text-xs sm:text-sm font-medium mb-1 ${isToday ? 'text-ieee-blue' : 'text-gray-700'}`}>
                     {day}
                   </div>
                   <div className="space-y-1">
                     {dayEvents.slice(0, 2).map(event => (
                       <div
                         key={event._id}
-                        className={`text-xs px-1 py-0.5 rounded truncate text-white ${getTypeColor(event.type)}`}
+                        className={`text-[10px] sm:text-xs px-1 py-0.5 rounded truncate text-white ${getTypeColor(event.type)}`}
                         title={event.title}
                       >
                         {event.title}
