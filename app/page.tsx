@@ -245,9 +245,9 @@ export default function Home() {
       </div>
 
       {/* Document Management */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">Documents & Reports</h2>
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Documents & Reports</h2>
           <div className="flex gap-2">
             <input
               type="file"
@@ -259,30 +259,30 @@ export default function Home() {
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="flex items-center gap-2 bg-ieee-blue text-white px-4 py-2 rounded-lg hover:bg-ieee-light transition disabled:bg-gray-400"
+              className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-ieee-blue text-white px-4 py-3 rounded-lg hover:bg-ieee-light transition disabled:bg-gray-400 text-sm sm:text-base font-medium"
             >
-              <Upload size={20} />
-              {uploading ? 'Uploading...' : 'Upload Document'}
+              <Upload className="w-4 h-4 sm:w-5 sm:h-5" />
+              {uploading ? 'Uploading...' : 'Upload'}
             </button>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="flex gap-4 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-4 sm:mb-6">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
             <input
               type="text"
               placeholder="Search documents..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+              className="w-full pl-9 sm:pl-10 pr-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-sm sm:text-base"
             />
           </div>
           <select
             value={selectedYear}
             onChange={(e) => setSelectedYear(parseInt(e.target.value))}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+            className="px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-sm sm:text-base min-w-[100px]"
           >
             {availableYears.length > 0 ? (
               availableYears.map(year => (
@@ -295,7 +295,7 @@ export default function Home() {
           <select
             value={filterCategory}
             onChange={(e) => setFilterCategory(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+            className="px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-sm sm:text-base min-w-[120px] sm:min-w-[150px]"
           >
             <option value="all">All Categories</option>
             <option value="report">Reports</option>
@@ -305,44 +305,54 @@ export default function Home() {
         </div>
 
         {/* Documents List */}
-        <div className="space-y-3">
+        <div className="space-y-2 sm:space-y-3">
           {filteredDocs.length === 0 ? (
-            <p className="text-center text-gray-500 py-8">No documents found</p>
+            <div className="text-center py-12">
+              <FileText className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-3" />
+              <p className="text-gray-500 text-sm sm:text-base">No documents found</p>
+            </div>
           ) : (
             filteredDocs.map((doc) => (
               <div
                 key={doc._id}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                className="flex flex-col sm:flex-row sm:items-center justify-between p-3 sm:p-4 border-2 border-gray-200 rounded-lg hover:bg-gray-50 hover:border-ieee-blue transition gap-3 sm:gap-4"
               >
-                <div className="flex items-center gap-4">
-                  <FileText className="text-ieee-blue" size={24} strokeWidth={1.5} />
-                  <div>
-                    <h3 className="font-semibold text-gray-800">{doc.name}</h3>
-                    <p className="text-sm text-gray-500">
-                      {doc.type} • {doc.size} • Uploaded {new Date(doc.uploadDate).toLocaleDateString()}
+                <div className="flex items-start sm:items-center gap-3 sm:gap-4 flex-1 min-w-0">
+                  <FileText className="text-ieee-blue flex-shrink-0 w-6 h-6 sm:w-7 sm:h-7 mt-1 sm:mt-0" strokeWidth={2} />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-semibold text-gray-800 text-sm sm:text-base truncate">{doc.name}</h3>
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                      <span className="inline-block">{doc.type}</span>
+                      <span className="mx-1">•</span>
+                      <span className="inline-block">{doc.size}</span>
+                      <br className="sm:hidden" />
+                      <span className="sm:mx-1 sm:inline hidden">•</span>
+                      <span className="inline-block">Uploaded {new Date(doc.uploadDate).toLocaleDateString()}</span>
                     </p>
+                    <span className="inline-block mt-2 px-2 sm:px-3 py-1 rounded text-xs font-semibold border border-ieee-blue text-ieee-blue bg-blue-50">
+                      {doc.category}
+                    </span>
                   </div>
-                  <span className="px-3 py-1 rounded text-xs font-semibold border border-ieee-blue text-ieee-blue bg-white">
-                    {doc.category}
-                  </span>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 sm:gap-3 justify-end sm:justify-start">
                   <a
                     href={doc.driveFileLink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 text-ieee-blue hover:text-black transition"
+                    className="flex items-center gap-2 px-4 py-2 text-ieee-blue hover:bg-ieee-blue hover:text-white border-2 border-ieee-blue rounded-lg transition font-medium text-sm"
                     title="Download"
                   >
-                    <Download size={20} strokeWidth={1.5} />
+                    <Download className="w-4 h-4" strokeWidth={2} />
+                    <span className="hidden sm:inline">Download</span>
                   </a>
                   {hydrated && canDeleteDocument() && (
                     <button
                       onClick={() => handleDelete(doc._id)}
-                      className="p-2 text-ieee-blue hover:text-red-600 transition"
+                      className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-600 hover:text-white border-2 border-red-600 rounded-lg transition font-medium text-sm"
                       title="Delete document"
                     >
-                      <Trash2 size={20} strokeWidth={1.5} />
+                      <Trash2 className="w-4 h-4" strokeWidth={2} />
+                      <span className="hidden sm:inline">Delete</span>
                     </button>
                   )}
                 </div>

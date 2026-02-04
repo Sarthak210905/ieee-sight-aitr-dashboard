@@ -146,16 +146,63 @@ export default function LeaderboardPage() {
       </div>
 
       {/* Current Leaderboard */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <Trophy className="text-ieee-blue" />
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <Trophy className="text-ieee-blue w-5 h-5 sm:w-6 sm:h-6" />
             Current Standings
           </h2>
-          <span className="text-sm text-gray-500">Updated: {new Date().toLocaleDateString()}</span>
+          <span className="text-xs sm:text-sm text-gray-500">Updated: {new Date().toLocaleDateString()}</span>
         </div>
 
-        <div className="overflow-x-auto">
+        {/* Mobile: Card View */}
+        <div className="lg:hidden space-y-3">
+          {currentLeaderboard.map((entry) => (
+            <div key={entry.rank} className={`border-2 rounded-lg p-4 transition ${
+              entry.rank <= 3 ? 'border-yellow-400 bg-yellow-50/30' : 'border-gray-200'
+            }`}>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <div className={`flex items-center justify-center w-12 h-12 rounded-full ${
+                    entry.rank === 1 ? 'bg-yellow-500' :
+                    entry.rank === 2 ? 'bg-gray-400' :
+                    entry.rank === 3 ? 'bg-orange-500' :
+                    'bg-ieee-blue'
+                  } text-white font-bold text-xl shadow-lg`}>
+                    {entry.rank}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-800 text-base sm:text-lg">{entry.name}</h3>
+                    <p className="text-2xl font-bold text-ieee-blue">{entry.points} pts</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1">
+                  {getTrendIcon(entry.trend)}
+                  {entry.change !== 0 && (
+                    <span className={`text-sm font-semibold ${
+                      entry.trend === 'up' ? 'text-green-600' : 'text-red-600'
+                    }`}>
+                      {entry.change > 0 ? '+' : ''}{entry.change}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="bg-blue-50 rounded-lg p-3 text-center">
+                  <p className="text-gray-600 text-xs mb-1">Events</p>
+                  <p className="font-bold text-gray-800 text-lg">{entry.eventsAttended}</p>
+                </div>
+                <div className="bg-green-50 rounded-lg p-3 text-center">
+                  <p className="text-gray-600 text-xs mb-1">Contributions</p>
+                  <p className="font-bold text-gray-800 text-lg">{entry.contributions}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Desktop: Table View */}
+        <div className="hidden lg:block overflow-x-auto table-scroll scrollbar-thin">
           <table className="w-full">
             <thead>
               <tr className="border-b-2 border-gray-200">
@@ -218,26 +265,27 @@ export default function LeaderboardPage() {
       </div>
 
       {/* Monthly Winners */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
-            <Calendar className="text-ieee-blue" />
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+        <div className="flex flex-col gap-4 mb-4 sm:mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <Calendar className="text-ieee-blue w-5 h-5 sm:w-6 sm:h-6" />
             Monthly Winners
           </h2>
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             {isAdmin && (
               <button
                 onClick={() => setShowAddWinnerForm(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition"
+                className="flex items-center justify-center gap-2 px-4 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition font-medium text-sm sm:text-base"
               >
-                <Trophy size={18} />
-                Declare Winner
+                <Trophy className="w-4 h-4 sm:w-5 sm:h-5" />
+                <span className="hidden sm:inline">Declare Winner</span>
+                <span className="sm:hidden">Declare</span>
               </button>
             )}
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+              className="flex-1 px-3 sm:px-4 py-2 sm:py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-sm sm:text-base font-medium"
             >
               {monthlyWinners.map((winner) => (
                 <option key={`${winner.month}-${winner.year}`} value={`${winner.month} ${winner.year}`}>
