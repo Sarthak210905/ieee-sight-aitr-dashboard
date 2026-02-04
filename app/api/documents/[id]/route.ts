@@ -6,10 +6,11 @@ import { googleDriveService } from '@/lib/googleDrive'
 // DELETE a document (member can only delete their own documents)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     const { searchParams } = new URL(request.url)
     const isAdmin = searchParams.get('isAdmin') === 'true'
     if (!isAdmin) {
@@ -18,7 +19,7 @@ export async function DELETE(
         { status: 403 }
       )
     }
-    const document = await Document.findById(params.id)
+    const document = await Document.findById(id)
     if (!document) {
       return NextResponse.json(
         { success: false, error: 'Document not found' },
@@ -30,7 +31,7 @@ export async function DELETE(
     } catch (error) {
       console.error('Error deleting from Google Drive:', error)
     }
-    await Document.findByIdAndDelete(params.id)
+    await Document.findByIdAndDelete(id)
     return NextResponse.json({ success: true, message: 'Document deleted' })
   } catch (error: any) {
     return NextResponse.json(
@@ -43,12 +44,13 @@ export async function DELETE(
 // GET a single document
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
-    const document = await Document.findById(params.id).lean()
+    const document = await Document.findById(id).lean()
     
     if (!document) {
       return NextResponse.json(

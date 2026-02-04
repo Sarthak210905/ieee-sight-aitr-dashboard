@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAdmin } from '@/contexts/AdminContext'
 import { useRouter } from 'next/navigation'
-import { Flag, MessageSquare, Clock, CheckCircle, AlertCircle, RefreshCw, Send } from 'lucide-react'
+import { Flag, MessageSquare, Clock, CheckCircle, AlertCircle, RefreshCw, Send, Loader2 } from 'lucide-react'
 
 interface Report {
   _id: string
@@ -25,6 +25,7 @@ export default function AdminReportsPage() {
   const router = useRouter()
   const [reports, setReports] = useState<Report[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'open' | 'in-progress' | 'resolved'>('open')
   const [responding, setResponding] = useState<string | null>(null)
   const [response, setResponse] = useState('')

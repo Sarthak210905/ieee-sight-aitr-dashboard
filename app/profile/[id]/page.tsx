@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
-import { User, Award, Trophy, Calendar, BookOpen, Mail, Star, TrendingUp, Edit2, Save, X } from 'lucide-react'
+import { User, Award, Trophy, Calendar, BookOpen, Mail, Star, TrendingUp, Edit2, Save, X, Loader2, AlertCircle } from 'lucide-react'
 import { useMember } from '@/contexts/MemberContext'
 import Link from 'next/link'
 
@@ -38,6 +38,7 @@ export default function ProfilePage() {
   
   const [profile, setProfile] = useState<MemberProfile | null>(null)
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [editing, setEditing] = useState(false)
   const [bio, setBio] = useState('')
   const [saving, setSaving] = useState(false)

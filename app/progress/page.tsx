@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { TrendingUp, Calendar, Target, CheckCircle, BarChart3, Plus } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { TrendingUp, Calendar, Target, CheckCircle, BarChart3, Plus, AlertCircle, Loader2 } from 'lucide-react'
 import AddProgressForm from '@/components/AddProgressForm'
 import { useAdmin } from '@/contexts/AdminContext'
 
@@ -16,6 +16,8 @@ interface ProgressData {
 export default function ProgressPage() {
   const { isAdmin } = useAdmin()
   const [progress, setProgress] = useState<ProgressData[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [selectedYear, setSelectedYear] = useState('2026')
   const [availableYears, setAvailableYears] = useState<string[]>(['2026', '2025'])
   const [showAddForm, setShowAddForm] = useState(false)

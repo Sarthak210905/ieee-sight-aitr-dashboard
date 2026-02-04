@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Award, FileText, Users, Search, Plus } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Award, FileText, Users, Search, Plus, AlertCircle, Loader2 } from 'lucide-react'
 import { useAdmin } from '@/contexts/AdminContext'
 import CertificateGenerator from '@/components/CertificateGenerator'
 
@@ -21,27 +21,39 @@ export default function CertificatesPage() {
   const { isAdmin } = useAdmin()
   const [members, setMembers] = useState<Member[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [showGenerator, setShowGenerator] = useState(false)
   const [selectedData, setSelectedData] = useState<any>(null)
 
-  useEffect(() => {
-    fetchMembers()
-  }, [])
-
-  const fetchMembers = async () => {
+  const fetchMembers = useCallback(async () => {
+    setLoading(true)
+    setError(null)
     try {
       const response = await fetch('/api/members')
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch members: ${response.statusText}`)
+      }
+      
       const result = await response.json()
       if (result.success) {
-        setMembers(result.data)
+        setMembers(result.data || [])
+      } else {
+        throw new Error(result.error || 'Failed to fetch members')
       }
     } catch (error) {
       console.error('Error fetching members:', error)
+      setError(error instanceof Error ? error.message : 'An unexpected error occurred')
+      setMembers([])
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    fetchMembers()
+  }, [fetchMembers])
 
   const openCertificateGenerator = (member: Member, achievement?: any) => {
     setSelectedData({

@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Award, Star, TrendingUp, Medal, Trophy, User, UserPlus, Edit } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Award, Star, TrendingUp, Medal, Trophy, User, UserPlus, Edit, AlertCircle, Loader2 } from 'lucide-react'
 import AddMemberForm from '@/components/AddMemberForm'
 import UpdateMemberForm from '@/components/UpdateMemberForm'
 import { useAdmin } from '@/contexts/AdminContext'
@@ -36,6 +36,8 @@ export default function MembersPage() {
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingMember, setEditingMember] = useState<StudentMember | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     fetchMembers()
@@ -43,14 +45,21 @@ export default function MembersPage() {
 
   const fetchMembers = async () => {
     try {
+      setLoading(true)
+      setError(null)
       const response = await fetch(`/api/members?year=${selectedYear}`)
       const result = await response.json()
       
       if (result.success) {
         setMembers(result.data)
+      } else {
+        setError('Failed to load members')
       }
     } catch (error) {
       console.error('Error fetching members:', error)
+      setError('Unable to connect to server')
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -58,6 +67,8 @@ export default function MembersPage() {
     member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     member.branch.toLowerCase().includes(searchTerm.toLowerCase())
   )
+
+  const topPerformers = members.slice(0, 3)
 
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -67,6 +78,36 @@ export default function MembersPage() {
       case 'excellence': return 'bg-yellow-100 text-yellow-700'
       default: return 'bg-gray-100 text-gray-700'
     }
+  }
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-ieee-blue mx-auto mb-4" />
+          <p className="text-gray-600">Loading members...</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <p className="text-gray-800 font-semibold mb-2">{error}</p>
+          <button
+            onClick={fetchMembers}
+            className="px-4 py-2 bg-ieee-blue text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -95,33 +136,36 @@ export default function MembersPage() {
       </div>
 
       {/* Top Performers */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {members.slice(0, 3).map((member, index) => (
-          <div
-            key={member.id}
-            className={`bg-gradient-to-br ${
-              index === 0 ? 'from-yellow-400 to-yellow-500' :
-              index === 1 ? 'from-gray-300 to-gray-400' :
-              'from-orange-400 to-orange-500'
-            } rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition cursor-pointer`}
-            onClick={() => setSelectedMember(member)}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Trophy size={24} />
-                <span className="text-2xl font-bold">#{member.rank}</span>
+      {topPerformers.length > 0 && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {topPerformers.map((member, index) => (
+            <button
+              key={`top-performer-${member.id}-${index}`}
+              onClick={() => setSelectedMember(member)}
+              className={`bg-gradient-to-br ${
+                index === 0 ? 'from-yellow-400 to-yellow-500' :
+                index === 1 ? 'from-gray-300 to-gray-400' :
+                'from-orange-400 to-orange-500'
+              } rounded-lg shadow-lg p-6 text-white transform hover:scale-105 transition cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-ieee-blue`}
+              aria-label={`View ${member.name}'s profile - Rank ${member.rank}`}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Trophy size={24} aria-hidden="true" />
+                  <span className="text-2xl font-bold">#{member.rank}</span>
+                </div>
+                <Medal size={32} aria-hidden="true" />
               </div>
-              <Medal size={32} />
-            </div>
-            <h3 className="text-xl font-bold mb-1">{member.name}</h3>
-            <p className="text-sm opacity-90 mb-3">{member.branch} • {member.year}</p>
-            <div className="bg-white/20 rounded-lg p-3">
-              <p className="text-2xl font-bold">{member.points} pts</p>
-              <p className="text-xs opacity-90">{member.achievements.length} achievements</p>
-            </div>
-          </div>
-        ))}
-      </div>
+              <h3 className="text-xl font-bold mb-1">{member.name}</h3>
+              <p className="text-sm opacity-90 mb-3">{member.branch} • {member.year}</p>
+              <div className="bg-white/20 rounded-lg p-3">
+                <p className="text-2xl font-bold">{member.points} pts</p>
+                <p className="text-xs opacity-90">{member.achievements.length} achievements</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Search */}
       <div className="bg-white rounded-lg shadow-md p-4">
@@ -137,10 +181,7 @@ export default function MembersPage() {
       {/* Members List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredMembers.map((member) => (
-          <div
-            key={member.id}
-            className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition"
-          >
+          <div key={member.id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition" >
             <div className="flex items-start justify-between mb-4">
               <div className="flex items-center gap-3 flex-1 cursor-pointer" onClick={() => setSelectedMember(member)}>
                 <div className="w-12 h-12 bg-ieee-blue rounded-full flex items-center justify-center text-white text-xl font-bold">

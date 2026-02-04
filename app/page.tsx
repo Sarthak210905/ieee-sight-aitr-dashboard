@@ -29,6 +29,8 @@ export default function Home() {
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
   const [availableYears, setAvailableYears] = useState<number[]>([])
   const [uploading, setUploading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [loggedInMember, setLoggedInMember] = useState<LoggedInMember | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
   const [hydrated, setHydrated] = useState(false)
@@ -75,6 +77,8 @@ export default function Home() {
   }
 
   const fetchDocuments = async () => {
+    setLoading(true)
+    setError(null)
     try {
       const params = new URLSearchParams()
       params.append('year', selectedYear.toString())
@@ -83,13 +87,24 @@ export default function Home() {
       }
 
       const response = await fetch(`/api/documents?${params}`)
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch documents: ${response.statusText}`)
+      }
+      
       const result = await response.json()
       
       if (result.success) {
-        setDocuments(result.data)
+        setDocuments(result.data || [])
+      } else {
+        throw new Error(result.error || 'Failed to fetch documents')
       }
     } catch (error) {
       console.error('Error fetching documents:', error)
+      setError(error instanceof Error ? error.message : 'An unexpected error occurred')
+      setDocuments([])
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -175,10 +190,7 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      {/* DEBUG: Show admin status */}
-      <div className="fixed bottom-2 right-2 bg-gray-100 border border-gray-300 rounded px-3 py-1 text-xs text-gray-700 z-50 shadow">
-        <span>Admin Mode: <b>{isAdmin ? 'ON' : 'OFF'}</b></span>
-      </div>
+
       {/* Header */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h1 className="text-3xl font-bold text-ieee-blue mb-2">

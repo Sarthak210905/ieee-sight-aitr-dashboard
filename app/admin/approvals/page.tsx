@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useAdmin } from '@/contexts/AdminContext'
 import { useRouter } from 'next/navigation'
-import { Shield, CheckCircle, XCircle, Clock, User, Award, Calendar, MessageSquare, RefreshCw } from 'lucide-react'
+import { Shield, CheckCircle, XCircle, Clock, User, Award, Calendar, MessageSquare, RefreshCw, AlertCircle, Loader2 } from 'lucide-react'
 
 interface Submission {
   _id: string
@@ -25,6 +25,7 @@ export default function AdminApprovalsPage() {
   const router = useRouter()
   const [submissions, setSubmissions] = useState<Submission[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('pending')
   const [processingId, setProcessingId] = useState<string | null>(null)
   const [comment, setComment] = useState<{ [key: string]: string }>({})

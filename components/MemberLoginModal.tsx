@@ -15,7 +15,7 @@ export default function MemberLoginModal() {
     email: '',
     password: '',
     confirmPassword: '',
-    branch: '',
+    branch: 'AIML',
     year: '',
   })
 
@@ -65,7 +65,7 @@ export default function MemberLoginModal() {
       email: '',
       password: '',
       confirmPassword: '',
-      branch: '',
+      branch: 'AIML',
       year: '',
     })
     setError('')
@@ -194,12 +194,8 @@ export default function MemberLoginModal() {
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
                     >
                       <option value="">Select</option>
-                      <option value="CSE">CSE</option>
-                      <option value="IT">IT</option>
-                      <option value="ECE">ECE</option>
-                      <option value="EE">EE</option>
-                      <option value="ME">ME</option>
-                      <option value="CE">CE</option>
+                      <option value="AIML">AIML</option>
+                   
                     </select>
                   </div>
                 </div>
@@ -215,7 +211,7 @@ export default function MemberLoginModal() {
                       className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
                     >
                       <option value="">Select</option>
-                      <option value="1st Year">1st Year</option>
+                  
                       <option value="2nd Year">2nd Year</option>
                       <option value="3rd Year">3rd Year</option>
                       <option value="4th Year">4th Year</option>

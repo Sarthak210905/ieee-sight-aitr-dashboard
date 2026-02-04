@@ -6,10 +6,11 @@ import { Member } from '@/models/Member'
 // DELETE - Delete own pending submission (Member only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
     const { searchParams } = new URL(request.url)
     const memberId = searchParams.get('memberId')
@@ -21,7 +22,7 @@ export async function DELETE(
       )
     }
     
-    const submission = await AchievementSubmission.findById(params.id)
+    const submission = await AchievementSubmission.findById(id)
     
     if (!submission) {
       return NextResponse.json(
@@ -46,7 +47,7 @@ export async function DELETE(
       )
     }
     
-    await AchievementSubmission.findByIdAndDelete(params.id)
+    await AchievementSubmission.findByIdAndDelete(id)
     
     return NextResponse.json({ success: true, message: 'Submission deleted' })
   } catch (error: any) {
@@ -61,10 +62,11 @@ export async function DELETE(
 // PATCH - Approve or reject submission (Admin only)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
     const body = await request.json()
     const { status, adminComment } = body
@@ -76,7 +78,7 @@ export async function PATCH(
       )
     }
     
-    const submission = await AchievementSubmission.findById(params.id)
+    const submission = await AchievementSubmission.findById(id)
     
     if (!submission) {
       return NextResponse.json(

@@ -4,14 +4,15 @@ import { Member } from '@/models/Member'
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
     const achievement = await request.json()
 
-    const member = await Member.findById(params.id)
+    const member = await Member.findById(id)
     
     if (!member) {
       return NextResponse.json(

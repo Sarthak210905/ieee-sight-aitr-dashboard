@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Calendar, Clock, MapPin, Users, ExternalLink, Plus, Filter, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Calendar, Clock, MapPin, Users, ExternalLink, Plus, Filter, ChevronLeft, ChevronRight, AlertCircle, Loader2 } from 'lucide-react'
 import { useAdmin } from '@/contexts/AdminContext'
 
 interface Event {
@@ -39,29 +39,41 @@ export default function EventsPage() {
   const { isAdmin } = useAdmin()
   const [events, setEvents] = useState<Event[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [filterType, setFilterType] = useState('all')
   const [showAddForm, setShowAddForm] = useState(false)
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth())
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
   const [viewMode, setViewMode] = useState<'calendar' | 'list'>('list')
 
-  useEffect(() => {
-    fetchEvents()
-  }, [currentYear])
-
-  const fetchEvents = async () => {
+  const fetchEvents = useCallback(async () => {
+    setLoading(true)
+    setError(null)
     try {
       const response = await fetch(`/api/events?year=${currentYear}`)
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch events: ${response.statusText}`)
+      }
+      
       const result = await response.json()
       if (result.success) {
-        setEvents(result.data)
+        setEvents(result.data || [])
+      } else {
+        throw new Error(result.error || 'Failed to fetch events')
       }
     } catch (error) {
       console.error('Error fetching events:', error)
+      setError(error instanceof Error ? error.message : 'An unexpected error occurred')
+      setEvents([])
     } finally {
       setLoading(false)
     }
-  }
+  }, [currentYear])
+
+  useEffect(() => {
+    fetchEvents()
+  }, [fetchEvents])
 
   const getTypeColor = (type: string) => {
     return EVENT_TYPES.find(t => t.value === type)?.color || 'bg-gray-500'

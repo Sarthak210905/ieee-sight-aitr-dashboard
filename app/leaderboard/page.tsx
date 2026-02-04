@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Trophy, TrendingUp, Award, Calendar, Crown, Star, Plus } from 'lucide-react'
+import { useState, useEffect, useCallback } from 'react'
+import { Trophy, TrendingUp, Award, Calendar, Crown, Star, Plus, AlertCircle, Loader2 } from 'lucide-react'
 import AddWinnerForm from '@/components/AddWinnerForm'
 import ExportButton from '@/components/ExportButton'
 import { useAdmin } from '@/contexts/AdminContext'
@@ -36,6 +36,8 @@ export default function LeaderboardPage() {
   const { isAdmin } = useAdmin()
   const [currentLeaderboard, setCurrentLeaderboard] = useState<LeaderboardEntry[]>([])
   const [monthlyWinners, setMonthlyWinners] = useState<MonthlyWinner[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
   const [selectedMonth, setSelectedMonth] = useState('')
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear())
   const [showAddWinnerForm, setShowAddWinnerForm] = useState(false)

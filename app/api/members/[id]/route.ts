@@ -5,12 +5,13 @@ import { Member } from '@/models/Member'
 // GET single member by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
-    const member = await Member.findById(params.id).lean()
+    const member = await Member.findById(id).lean()
     
     if (!member) {
       return NextResponse.json(
@@ -35,16 +36,17 @@ export async function GET(
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
     const body = await request.json()
     const { eventsAttended, contributions, points, bio, profileImage } = body
 
     const updatedMember = await Member.findByIdAndUpdate(
-      params.id,
+      id,
       {
         ...(eventsAttended !== undefined && { eventsAttended }),
         ...(contributions !== undefined && { contributions }),
@@ -79,12 +81,13 @@ export async function PATCH(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
-    const deletedMember = await Member.findByIdAndDelete(params.id)
+    const deletedMember = await Member.findByIdAndDelete(id)
 
     if (!deletedMember) {
       return NextResponse.json(

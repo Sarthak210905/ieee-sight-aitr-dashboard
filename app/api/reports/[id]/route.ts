@@ -5,10 +5,11 @@ import { Report } from '@/models/Report'
 // DELETE - Member can delete their own reports (only if status is 'open')
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     const { searchParams } = new URL(request.url)
     const isAdmin = searchParams.get('isAdmin') === 'true'
     if (!isAdmin) {
@@ -17,14 +18,14 @@ export async function DELETE(
         { status: 403 }
       )
     }
-    const report = await Report.findById(params.id)
+    const report = await Report.findById(id)
     if (!report) {
       return NextResponse.json(
         { success: false, error: 'Report not found' },
         { status: 404 }
       )
     }
-    await Report.findByIdAndDelete(params.id)
+    await Report.findByIdAndDelete(id)
     return NextResponse.json({ success: true, message: 'Report deleted successfully' })
   } catch (error: any) {
     console.error('Error deleting report:', error)
@@ -38,10 +39,11 @@ export async function DELETE(
 // PATCH - Update report status and add response (Admin only)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     await connectDB()
+    const { id } = await params
     
     const body = await request.json()
     const { status, adminResponse } = body
@@ -60,7 +62,7 @@ export async function PATCH(
     }
     
     const report = await Report.findByIdAndUpdate(
-      params.id,
+      id,
       updateData,
       { new: true }
     )
