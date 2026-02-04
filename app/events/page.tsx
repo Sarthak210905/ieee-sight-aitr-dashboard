@@ -140,14 +140,14 @@ export default function EventsPage() {
   return (
     <div className="space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+      <div className="bg-white rounded-lg shadow-md p-5 sm:p-6">
         <div className="flex flex-col gap-4">
           <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ieee-blue mb-2 flex items-center gap-2">
-              <Calendar className="text-ieee-blue w-6 h-6 sm:w-8 sm:h-8" />
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-ieee-blue mb-2 flex items-center gap-2 sm:gap-3">
+              <Calendar className="text-ieee-blue w-7 h-7 sm:w-8 sm:h-8" />
               Events Calendar
             </h1>
-            <p className="text-sm sm:text-base text-gray-600">Upcoming workshops, seminars, and activities</p>
+            <p className="text-base sm:text-lg text-gray-600">Upcoming workshops, seminars, and activities</p>
           </div>
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
             <div className="flex bg-gray-100 rounded-lg p-1 flex-1 sm:flex-initial">
@@ -285,56 +285,61 @@ export default function EventsPage() {
                 {upcomingEvents.map(event => (
                   <div
                     key={event._id}
-                    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition"
+                    className="border-2 border-gray-200 rounded-lg p-4 sm:p-5 hover:border-ieee-blue hover:shadow-lg transition"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className={`w-2 h-full rounded-full ${getTypeColor(event.type)}`}></div>
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <div>
-                            <h3 className="font-bold text-lg text-gray-800">{event.title}</h3>
-                            <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadge(event.status)}`}>
-                              {event.status}
-                            </span>
-                          </div>
-                          <div className={`px-3 py-1 rounded-full text-xs text-white ${getTypeColor(event.type)}`}>
-                            {event.type}
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                      <div className={`hidden sm:block w-1 sm:w-2 h-full rounded-full ${getTypeColor(event.type)} flex-shrink-0`}></div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                          <div className="flex-1">
+                            <h3 className="font-bold text-lg sm:text-xl text-gray-800 mb-2">{event.title}</h3>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className={`text-xs sm:text-sm px-3 py-1 rounded-full font-medium ${getStatusBadge(event.status)}`}>
+                                {event.status}
+                              </span>
+                              <div className={`px-3 py-1 rounded-full text-xs sm:text-sm text-white ${getTypeColor(event.type)} font-medium`}>
+                                {event.type}
+                              </div>
+                            </div>
                           </div>
                         </div>
-                        <p className="text-gray-600 mb-3">{event.description}</p>
-                        <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <Calendar size={14} />
-                            {new Date(event.date).toLocaleDateString('en-US', {
+
+                        <p className="text-gray-600 mb-4 text-sm sm:text-base leading-relaxed">{event.description}</p>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm sm:text-base text-gray-600">
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <Calendar className="text-ieee-blue flex-shrink-0" size={18} />
+                            <span>{new Date(event.date).toLocaleDateString('en-US', {
                               weekday: 'short',
                               month: 'short',
                               day: 'numeric',
                               year: 'numeric'
-                            })}
-                          </span>
+                            })}</span>
+                          </div>
                           {event.time && (
-                            <span className="flex items-center gap-1">
-                              <Clock size={14} />
-                              {event.time}
-                            </span>
+                            <div className="flex items-center gap-2 sm:gap-3">
+                              <Clock className="text-ieee-blue flex-shrink-0" size={18} />
+                              <span>{event.time}</span>
+                            </div>
                           )}
-                          <span className="flex items-center gap-1">
-                            <MapPin size={14} />
-                            {event.location}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Users size={14} />
-                            {event.organizer}
-                          </span>
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <MapPin className="text-ieee-blue flex-shrink-0" size={18} />
+                            <span className="truncate">{event.location}</span>
+                          </div>
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <Users className="text-ieee-blue flex-shrink-0" size={18} />
+                            <span className="truncate">{event.organizer}</span>
+                          </div>
                         </div>
+
                         {event.registrationLink && (
                           <a
                             href={event.registrationLink}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 mt-3 text-ieee-blue hover:underline"
+                            className="mt-4 inline-flex items-center gap-2 text-ieee-blue hover:underline text-base font-medium min-h-[44px]"
                           >
-                            <ExternalLink size={14} />
+                            <ExternalLink size={18} />
                             Register Now
                           </a>
                         )}
@@ -348,24 +353,24 @@ export default function EventsPage() {
 
           {/* Past Events */}
           {pastEvents.length > 0 && (
-            <div className="bg-white rounded-lg shadow-md p-6">
-              <h2 className="text-xl font-bold text-gray-800 mb-4">Past Events</h2>
+            <div className="bg-white rounded-lg shadow-md p-5 sm:p-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-5">Past Events</h2>
               <div className="grid gap-3">
                 {pastEvents.slice(0, 5).map(event => (
                   <div
                     key={event._id}
-                    className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg"
+                    className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
                   >
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white text-xs ${getTypeColor(event.type)}`}>
+                    <div className={`w-12 h-12 sm:w-14 sm:h-14 rounded-lg flex items-center justify-center text-white text-base sm:text-lg font-bold flex-shrink-0 ${getTypeColor(event.type)}`}>
                       {new Date(event.date).getDate()}
                     </div>
-                    <div className="flex-1">
-                      <h4 className="font-medium text-gray-800">{event.title}</h4>
-                      <p className="text-sm text-gray-500">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium text-base sm:text-lg text-gray-800 truncate">{event.title}</h4>
+                      <p className="text-sm sm:text-base text-gray-500">
                         {new Date(event.date).toLocaleDateString()} • {event.location}
                       </p>
                     </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadge(event.status)}`}>
+                    <span className={`text-xs sm:text-sm px-2 sm:px-3 py-1 rounded-full font-medium flex-shrink-0 ${getStatusBadge(event.status)}`}>
                       {event.status}
                     </span>
                   </div>
@@ -430,74 +435,74 @@ function AddEventForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b border-gray-200">
-          <h2 className="text-2xl font-bold text-gray-800">Add New Event</h2>
+        <div className="p-5 sm:p-6 border-b border-gray-200">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Add New Event</h2>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="p-5 sm:p-6 space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
+            <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Title *</label>
             <input
               type="text"
               required
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description *</label>
+            <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Description *</label>
             <textarea
               required
               rows={3}
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date *</label>
+              <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Date *</label>
               <input
                 type="date"
                 required
                 value={formData.date}
                 onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Time</label>
+              <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Time</label>
               <input
                 type="time"
                 value={formData.time}
                 onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
+            <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Location *</label>
             <input
               type="text"
               required
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
               placeholder="e.g., Room 101, Main Building"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Type *</label>
+              <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Type *</label>
               <select
                 value={formData.type}
                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
               >
                 <option value="workshop">Workshop</option>
                 <option value="seminar">Seminar</option>
@@ -508,51 +513,51 @@ function AddEventForm({ onClose, onSuccess }: { onClose: () => void; onSuccess: 
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Max Participants</label>
+              <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Max Participants</label>
               <input
                 type="number"
                 value={formData.maxParticipants}
                 onChange={(e) => setFormData({ ...formData, maxParticipants: e.target.value })}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+                className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Organizer *</label>
+            <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Organizer *</label>
             <input
               type="text"
               required
               value={formData.organizer}
               onChange={(e) => setFormData({ ...formData, organizer: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
               placeholder="e.g., IEEE SIGHT AITR"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Registration Link</label>
+            <label className="block text-base sm:text-sm font-medium text-gray-700 mb-2">Registration Link</label>
             <input
               type="url"
               value={formData.registrationLink}
               onChange={(e) => setFormData({ ...formData, registrationLink: e.target.value })}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue"
+              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-ieee-blue text-base"
               placeholder="https://..."
             />
           </div>
 
-          <div className="flex gap-3 pt-4">
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+              className="w-full sm:flex-1 py-3 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition text-base font-medium min-h-[52px]"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="flex-1 py-2 bg-ieee-blue text-white rounded-lg hover:bg-ieee-light transition disabled:bg-gray-400"
+              className="w-full sm:flex-1 py-3 bg-ieee-blue text-white rounded-lg hover:bg-ieee-light transition disabled:bg-gray-400 text-base font-medium min-h-[52px]"
             >
               {loading ? 'Creating...' : 'Create Event'}
             </button>

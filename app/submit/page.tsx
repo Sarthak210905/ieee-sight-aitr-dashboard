@@ -214,40 +214,40 @@ export default function SubmitAchievementPage() {
       </div>
 
       {/* Member Info */}
-      <div className="bg-gradient-to-r from-ieee-blue to-ieee-light text-white rounded-lg shadow-md p-6">
+      <div className="bg-gradient-to-r from-ieee-blue to-ieee-light text-white rounded-lg shadow-md p-5 sm:p-6">
         <div className="flex items-center gap-4">
-          <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-2xl font-bold">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center text-xl sm:text-2xl font-bold flex-shrink-0">
             {member?.name?.charAt(0).toUpperCase()}
           </div>
-          <div>
-            <h2 className="text-xl font-bold">{member?.name}</h2>
-            <p className="opacity-90">{member?.email}</p>
+          <div className="min-w-0 flex-1">
+            <h2 className="text-lg sm:text-xl font-bold truncate">{member?.name}</h2>
+            <p className="opacity-90 text-sm sm:text-base truncate">{member?.email}</p>
           </div>
         </div>
       </div>
 
       {/* Submission Form */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Submit New Achievement</h2>
+      <div className="bg-white rounded-lg shadow-md p-5 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-5 sm:mb-6">Submit New Achievement</h2>
         
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-base sm:text-sm font-medium text-gray-700 mb-3">
               Category *
             </label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.value}
                   type="button"
                   onClick={() => handleCategoryChange(cat.value)}
-                  className={`p-4 border-2 rounded-lg transition ${
+                  className={`p-4 sm:p-4 border-2 rounded-lg transition min-h-[60px] ${
                     formData.category === cat.value
-                      ? 'border-ieee-blue bg-blue-50'
-                      : 'border-gray-200 hover:border-gray-300'
+                      ? 'border-ieee-blue bg-blue-50 shadow-md'
+                      : 'border-gray-200 hover:border-gray-300 hover:shadow-sm'
                   }`}
                 >
-                  {/* <div className="text-3xl mb-2">{cat.icon}</div> */}
+                  {/* <div className="text-3xl mb-2">{cat.icon}</div> */
                   <div className="text-sm font-medium text-gray-800">{cat.label}</div>
                   <div className="text-xs text-gray-500">{cat.points} points</div>
                 </button>
@@ -299,7 +299,7 @@ export default function SubmitAchievementPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-ieee-blue text-white py-3 rounded-lg hover:bg-ieee-light transition disabled:bg-gray-400 flex items-center justify-center gap-2"
+            className="w-full bg-ieee-blue text-white py-4 sm:py-3 rounded-lg hover:bg-ieee-light transition disabled:bg-gray-400 flex items-center justify-center gap-2 text-base sm:text-base font-medium min-h-[52px]"
           >
             <Send size={20} />
             {loading ? 'Submitting...' : 'Submit Achievement'}
@@ -308,37 +308,37 @@ export default function SubmitAchievementPage() {
       </div>
 
       {/* My Submissions */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">My Submissions</h2>
+      <div className="bg-white rounded-lg shadow-md p-5 sm:p-6">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-5 sm:mb-6">My Submissions</h2>
         
         {mySubmissions.length === 0 ? (
-          <div className="text-center py-8">
-            <Trophy className="mx-auto text-gray-300 mb-4" size={48} />
-            <p className="text-gray-500">No submissions yet. Submit your first achievement above!</p>
+          <div className="text-center py-8 sm:py-10">
+            <Trophy className="mx-auto text-gray-300 mb-4" size={56} />
+            <p className="text-gray-500 text-base sm:text-base">No submissions yet. Submit your first achievement above!</p>
           </div>
         ) : (
           <div className="space-y-4">
             {mySubmissions.map((submission) => (
               <div
                 key={submission._id}
-                className="border border-gray-200 rounded-lg p-4"
+                className="border-2 border-gray-200 rounded-lg p-4 sm:p-5 hover:border-ieee-blue hover:shadow-md transition"
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-bold text-gray-800">{submission.title}</h3>
-                      <span className={`text-xs px-2 py-1 rounded-full ${getStatusColor(submission.status)}`}>
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      <h3 className="font-bold text-base sm:text-lg text-gray-800">{submission.title}</h3>
+                      <span className={`text-xs sm:text-sm px-3 py-1 rounded-full font-medium ${getStatusColor(submission.status)}`}>
                         {submission.status}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{submission.description}</p>
-                    <div className="flex items-center gap-4 text-xs text-gray-500">
-                      <span>Category: {submission.category}</span>
-                      <span>Points: {submission.points}</span>
+                    <p className="text-sm sm:text-base text-gray-600 mb-3">{submission.description}</p>
+                    <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-gray-500">
+                      <span className="font-medium">Category: {submission.category}</span>
+                      <span className="font-medium">Points: {submission.points}</span>
                       <span>Submitted: {new Date(submission.submittedAt).toLocaleDateString()}</span>
                     </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-shrink-0">
                     {getStatusIcon(submission.status)}
                   </div>
                 </div>
@@ -359,12 +359,12 @@ export default function SubmitAchievementPage() {
 
       {/* My Reports */}
       {myReports.length > 0 && (
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">My Reports</h2>
+        <div className="bg-white rounded-lg shadow-md p-5 sm:p-6">
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-5 sm:mb-6">My Reports</h2>
           
           <div className="space-y-4">
             {myReports.map((report) => (
-              <div key={report._id} className="border border-gray-200 rounded-lg p-4">
+              <div key={report._id} className="border-2 border-gray-200 rounded-lg p-4 sm:p-5 hover:border-ieee-blue hover:shadow-md transition">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
